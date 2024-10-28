@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,25 @@ using UnityEngine;
 public class Pin : MonoBehaviour
 {
     [SerializeField] private Rigidbody myRigidBody;
+    [SerializeField] private AudioSource pinHitSound;
+
     private Quaternion originalRot;
     private Vector3 originalPos;
+
     // Start is called before the first frame update
     void Start()
     {
         originalRot = transform.rotation;
         originalPos = transform.position;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            pinHitSound.pitch = UnityEngine.Random.Range(0.9f, 1.2f);
+            pinHitSound.Play(); 
+        }
     }
 
     // Update is called once per frame

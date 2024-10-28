@@ -42,16 +42,15 @@ public class GameManager : MonoBehaviour
         
         if(throwCounter == 2 || firstThrowScore == 10)
         {
-            //STRIKE OR A SPARE DISPLAY IN UI
+            //STRIKE OR A SPARE DISPLAY IN UI | other place to place code
             StartNewFrame();
 
             if (currentFrame > maxAmountOfFrames) // if its past the last frame
             {
+                ui.DisplayGameOverScreen(totalScore); 
                 return;
             }
         }
-
-        
 
         Instantiate(ballPrefab, transform.position, transform.rotation);
     }
@@ -63,10 +62,11 @@ public class GameManager : MonoBehaviour
         secondThrowScore = 0;
         
         //DISPLAY TOTAL SCORE
+        ui.UpdateTotalThrowOnFrame(currentFrame, totalScore);
 
         throwCounter = 0;
 
-        currentFrame++;
+        currentFrame++; //updating currentframe
 
         RepositionPins();
     }
@@ -98,11 +98,25 @@ public class GameManager : MonoBehaviour
         {
             firstThrowScore = score;
             ui.UpdateFirstThrowOnFrame(currentFrame, firstThrowScore);
+
+            //Strike
+            if(firstThrowScore == 10)
+            {
+                ui.DisplayStrike(currentFrame);
+            }
         }
-        else
+        else if(throwCounter ==2)
         {
             secondThrowScore = score;
+            ui.UpdateSecondThrowOnFrame(currentFrame, secondThrowScore);
+
+            //Spare
+            if (firstThrowScore + secondThrowScore == 10)
+            {
+                ui.DisplaySpare(currentFrame);
+            }
         }
+
         Debug.Log(score);
     }
 

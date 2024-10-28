@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody myRigidBody;
     [SerializeField] private bool wasThrown;
     [SerializeField] private GameObject aimingArrow;
+    [SerializeField] private AudioSource rollingSource;
 
     // Start is called before the first frame update
     void Start()
@@ -41,20 +42,26 @@ public class PlayerController : MonoBehaviour
 
             wasThrown = true;
             myRigidBody.AddForce(aimingArrow.transform.forward * throwStrength, ForceMode.Impulse); //myRigidBody.AddForce(Vector3.forward * throwStrength, ForceMode.Impulse);
+            
+            rollingSource.Play();
+
             Invoke("StopThrow", 8f);
         }
     } 
 
     void OnTriggerEnter(Collider other) // has Stay and Exit  methods too.
     {
-        StopThrow();
-        
+        if (other.CompareTag("Respawn"))
+        {
+            StopThrow();
+        }
     }
 
     void StopThrow()
     {
+        CancelInvoke();
         FindObjectOfType<GameManager>().BallInPit();
-        Destroy(gameObject, 2);
+        Destroy(gameObject, 1f);
     }
  
 }

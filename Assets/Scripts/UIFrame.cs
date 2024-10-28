@@ -36,4 +36,15 @@ public class UIFrame : MonoBehaviour
     {
         totalScoreText.text = totalScore.ToString();
     }
+
+    public void SetStrikeText()
+    {
+        firstThrowText.text = "";
+        secondThrowText.text = "X";
+    }
+
+    public void SetSpareText()
+    {
+        secondThrowText.text = "/";
+    }
 }
